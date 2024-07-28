@@ -1,0 +1,61 @@
+
+<!--Write a program to create a product list and add to the wish list feature for 
+the products in ecommerce store and display the wish list items.
+ You can write the program in any of the languages as per your comfort. 
+ The design is not required. Database is optional;
+  you can also work using an array or any other data structure as per your comfort. 
+Though if you opt to use a database, you can.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Store</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Product List</h2>
+        <div id="productList" class="row"></div>
+        <a href="wishlist.html" class="btn btn-primary mt-5">View Wishlist</a>
+    </div>
+
+    <script>
+                localStorage.removeItem('wishlist');
+
+        const products = [
+            { id: 1, name: "Smartphone", price: 299 },
+            { id: 2, name: "Laptop", price: 999 },
+            { id: 3, name: "Headphones", price: 99 }
+        ];
+
+        const renderProducts = () => {
+            document.querySelector('#productList').innerHTML = products.map(product => `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">Price: $${product.price}</p>
+                            <button class="btn btn-primary" onclick="addToWishlist(${product.id})">Add to Wishlist</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        const addToWishlist = (id) => {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const product = products.find(p => p.id === id);
+            if (!wishlist.find(item => item.id === id)) {
+                wishlist.push(product);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                alert(`${product.name} has been added to your wishlist.`);
+            } else {
+                alert(`${product.name} is already in your wishlist.`);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', renderProducts);
+    </script>
+</body>
+</html>

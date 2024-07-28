@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Cart</h2>
+        <div id="cartList" class="row"></div>
+        <a href="index.html" class="btn btn-secondary mt-5">Back to Products</a>
+    </div>
+
+    <script>
+        const renderCart = () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Your cart is empty.');
+            } else {
+                alert('Items in your cart: ' + cart.length);
+            }
+            document.querySelector('#cartList').innerHTML = cart.map(item => `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.name}</h5>
+                            <p class="card-text">Price: $${item.price}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        document.addEventListener('DOMContentLoaded', renderCart);
+    </script>
+</body>
+</html>

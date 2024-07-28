@@ -1,0 +1,65 @@
+<!--Write a program to integrate the payment gateway of your choice in an ecommerce page.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Store</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Product List</h2>
+        <div id="productList" class="row"></div>
+        <button class="btn btn-primary mt-5" onclick="checkout()">Pay Now</button>
+    </div>
+
+    <script>
+        // Clear cart on page load
+        localStorage.removeItem('cart');
+
+        const products = [
+            { id: 1, name: "Smartphone", price: 299 },
+            { id: 2, name: "Laptop", price: 999 },
+            { id: 3, name: "Headphones", price: 99 }
+        ];
+        let cart = [];
+
+        const renderProducts = () => {
+            document.querySelector('#productList').innerHTML = products.map(p => `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${p.name}</h5>
+                            <p class="card-text">Price: $${p.price}</p>
+                            <button class="btn btn-primary" onclick="addToCart(${p.id})">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        const addToCart = id => {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                cart.push(product);
+                alert(`${product.name} added to cart`);
+            }
+        };
+
+        const checkout = () => {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            const total = cart.reduce((sum, product) => sum + product.price, 0);
+            const orderSummary = cart.map(p => `${p.name} - $${p.price}`).join('\n');
+            alert(`Order Summary:\n${orderSummary}\n\nTotal: $${total}`);
+            alert('Payment processed successfully!');
+            cart = [];
+        };
+
+        document.addEventListener('DOMContentLoaded', renderProducts);
+    </script>
+</body>
+</html>

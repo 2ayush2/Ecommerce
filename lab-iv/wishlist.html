@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Wishlist</h2>
+        <div id="wishlist" class="row"></div>
+        <a href="index.html" class="btn btn-secondary mt-5">Back to Products</a>
+    </div>
+
+    <script>
+        const renderWishlist = () => {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            document.querySelector('#wishlist').innerHTML = wishlist.map(item => `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.name}</h5>
+                            <p class="card-text">Price: $${item.price}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        document.addEventListener('DOMContentLoaded', renderWishlist);
+    </script>
+</body>
+</html>
