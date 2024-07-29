@@ -1,0 +1,7 @@
+Line 1: int: keyword  main: identifier  (: delimiter  ): delimiter
+Line 2: int: keyword  a: identifier  =: operator  10: identifier
+Line 3: ;: delimiter  float: keyword  b: identifier  =: operator
+Line 4: 205: identifier  ;: delimiter  if: keyword  (: delimiter
+Line 5: a: identifier  b: identifier  ): delimiter  a: identifier
+Line 6: =: operator  a: identifier  +: operator  b: identifier
+Line 7: ;: delimiter  return: keyword  0: identifier  ;: delimiter
