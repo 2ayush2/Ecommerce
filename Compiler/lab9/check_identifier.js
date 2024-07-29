@@ -7,28 +7,9 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-const isValidIdentifier = (identifier) => {
-    if (identifier.length === 0) return false;
-
-    // Check if the first character is valid
-    if (!/^[a-zA-Z_]$/.test(identifier[0])) return false;
-
-    // Check remaining characters
-    for (let i = 1; i < identifier.length; i++) {
-        if (!/^[a-zA-Z0-9_]$/.test(identifier[i])) return false;
-    }
-
-    return true;
-};
+const isValidIdentifier = (id) => /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(id.trim());
 
 rl.question('Enter an identifier: ', (input) => {
-    const identifier = input.trim();
-
-    if (isValidIdentifier(identifier)) {
-        console.log('\nValid identifier');
-    } else {
-        console.log('\nNot a valid identifier');
-    }
-
+    console.log(isValidIdentifier(input) ? 'Valid identifier' : 'Not a valid identifier');
     rl.close();
 });
