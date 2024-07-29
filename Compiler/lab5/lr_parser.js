@@ -10,7 +10,10 @@ const ops = new Set(['+', '-', '*', '/']); // Operators set for quick lookup
 
 const push = (c) => stack.push(c);
 const pop = () => stack.length ? stack.pop() : 'x';
-const printStat = () => process.stdout.write(`\n$${stack.join('')}$`);
+const printStat = () => {
+    // Print stack status without extra line breaks
+    process.stdout.write(`\n$${stack.join('')}$`);
+};
 
 const parse = (input) => {
     input = input.replace(/id/g, 'E'); // Replace 'id' with 'E'
@@ -21,7 +24,7 @@ const parse = (input) => {
             push('E');
             printStat();
             process.stdout.write(' id');
-        } else if (ops.has(input[i]) || input[i] === 'E') {
+        } else if (ops.has(input[i])) {
             push(input[i]);
             printStat();
         }
@@ -29,18 +32,22 @@ const parse = (input) => {
     }
     printStat();
 
+    // Process reductions
     while (stack.length) {
         let ch = pop();
         if (ch === 'x') break;
         if (ops.has(ch)) {
+            // Expect 'E' to be on the stack
             if (pop() !== 'E') {
-                process.stdout.write("\nError: invalid expression");
+                process.stdout.write("\nRejected");
                 return;
             }
             push('E');
             printStat();
         }
     }
+
+    // Check if the final stack contains exactly one 'E' symbol
     process.stdout.write(stack.length === 1 && stack[0] === 'E' ? "\nAccepted" : "\nRejected");
 };
 
