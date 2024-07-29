@@ -5,46 +5,31 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-let str, tempCh = 'z', left = '', right = '';
+let str, tempCh = 'z';
 
-const findOperators = () => {
-    return str.split('').reduce((ops, char, idx) => {
-        if ('+-*/:'.includes(char)) ops.push({ pos: idx, op: char });
-        return ops;
-    }, []);
-};
+const processExpression = () => {
+    const ops = [...str.matchAll(/[+\-*/]/g)];
+    let output = '';
 
-const updateStr = (pos, char) => str = str.substring(0, pos) + char + str.substring(pos + 1);
+    ops.forEach(({ index: pos, 0: op }) => {
+        let left = str.slice(0, pos).replace(/[^a-zA-Z0-9_]/g, '').trim();
+        let right = str.slice(pos + 1).replace(/[^a-zA-Z0-9_]/g, '').trim();
 
-const processExpression = (ops) => {
-    ops.forEach(({ pos, op }) => {
-        let i = pos - 1;
-        left = '';
-        while (i >= 0 && !'+*/:'.includes(str[i])) left = str[i--] + left;
-        i = pos + 1;
-        right = '';
-        while (i < str.length && !'+*/:'.includes(str[i])) right += str[i++];
-
-        // Print the intermediate code and the updated expression
-        process.stdout.write(`\t${tempCh} := ${left} ${op} ${right}\t\t${updateStr(pos, tempCh)}\n`);
-        
-        // Update the temporary variable for the next operation
-        tempCh = String.fromCharCode(tempCh.charCodeAt(0) + 1);
+        output += `\t${tempCh} := ${left} ${op} ${right}\t${str.slice(0, pos) + tempCh + str.slice(pos + 1)}\n`;
+        tempCh = String.fromCharCode(tempCh.charCodeAt(0) - 1);
     });
 
-    // Final assignment if there are no more operators
-    if (!ops.length) {
-        let i = str.length - 1;
-        left = '';
-        while (i >= 0 && !'+*/:'.includes(str[i])) left = str[i--] + left;
-        process.stdout.write(`\t${tempCh} := ${left}\n`);
+    if (ops.length === 0) {
+        let finalExpr = str.replace(/[^a-zA-Z0-9_]/g, '').trim();
+        output += `\t${tempCh} := ${finalExpr}\n`;
     }
+
+    console.log('\n\tIntermediate Code\t\tExpression\n');
+    console.log(output);
 };
 
-rl.question('Enter the Expression: ', (input) => {
+rl.question('Enter the Expression: ', input => {
     str = input.trim();
-    const ops = findOperators();
-    process.stdout.write('\n\tIntermediate Code\t\tExpression\n\n');
-    processExpression(ops);
+    processExpression();
     rl.close();
 });
